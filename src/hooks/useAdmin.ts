@@ -2,7 +2,7 @@ import { ref, reactive, onMounted, toRefs } from 'vue';
 // import { useQuasar } from 'quasar';
 import { useQuasar } from 'quasar';
 
-import NoticeDialog from 'src/components/NoticeDialog.vue';
+import AdminDialog from 'src/components/AdminDialog.vue';
 import axios from 'axios';
 import { Notice } from './Notice';
 import { useRoute, useRouter } from 'vue-router';
@@ -18,8 +18,8 @@ const columns = [
     field: 'id',
     sortable: true,
   },
-  { name: 'name', label: 'name', field: 'name' },
-  { name: 'title', label: 'title', field: 'title' },
+  { name: 'admin', label: 'admin', field: 'admin' },
+
   {
     name: 'time',
     label: 'time',
@@ -36,7 +36,7 @@ const columns = [
 
 function getNoticeList() {
   return axios
-    .get('http://127.0.0.1/v1/pullServerNotice')
+    .get('http://127.0.0.1/v1/pullServerAdmin')
     .then(function (response) {
       return response.data.result;
     })
@@ -45,7 +45,7 @@ function getNoticeList() {
     });
 }
 
-export default function useMainLayout() {
+export default function useAdmin() {
   const selected = ref([]);
   const $q = useQuasar();
   const route = useRoute();
@@ -58,11 +58,6 @@ export default function useMainLayout() {
   });
 
 
-  // 退出登陆
-  const loginout = async () => {
-    store.dispatch('setAccount', undefined);
-    router.push({ path: '/' });
-  };
 
 
 
@@ -70,9 +65,9 @@ export default function useMainLayout() {
     data.rows = (await getNoticeList()) as Notice[];
   });
 
-  const modifyNotice = (props: any) => {
+  const modifyAdmin = (props: any) => {
     $q.dialog({
-      component: NoticeDialog,
+      component: AdminDialog,
       componentProps: {
         row: props ? props.row : null,
       },
@@ -82,10 +77,9 @@ export default function useMainLayout() {
   return {
     selected,
     columns,
-    // getSelectedString,
     drawer: ref(false),
-    modifyNotice,
+    modifyAdmin,
     ...toRefs(data),
-    loginout
+
   };
 }

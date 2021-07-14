@@ -84,8 +84,9 @@ export default {
           if (session.topic !== data.session?.topic) return;
           console.log('EVENT', 'session_deleted');
           resetApp();
+          // 退出到登陆
           router.push({
-            path: '/',
+            path: '/login',
           });
         }
       );
@@ -144,8 +145,9 @@ export default {
       store.dispatch('setAccount', {
         accountName: accountName,
       });
+      // 进入首页
       router.push({
-        path: '/index',
+        path: '/',
       });
     };
 

@@ -3,7 +3,7 @@
     <q-layout view="lHh Lpr lff" class="shadow-2 rounded-borders">
       <q-header elevated class="bg-cyan-8">
         <q-toolbar>
-          <q-toolbar-title>Notice</q-toolbar-title>
+          <q-toolbar-title>{{ title }}</q-toolbar-title>
           <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
           <q-btn flat @click="loginout" label="登出"></q-btn>
         </q-toolbar>
@@ -12,11 +12,18 @@
       <q-drawer v-model="drawer" show-if-above :width="200" :breakpoint="400">
         <q-scroll-area class="drawer-area">
           <q-list padding>
-            <q-item active clickable v-ripple>
+            <q-item active clickable v-ripple @click="pageTo('notice')">
               <q-item-section avatar>
                 <q-icon name="img:bell.svg" />
               </q-item-section>
               <q-item-section style="color: black"> Notice </q-item-section>
+            </q-item>
+
+            <q-item active clickable v-ripple @click="pageTo('admin')">
+              <q-item-section avatar>
+                <q-icon name="img:personal.svg"></q-icon>
+              </q-item-section>
+              <q-item-section style="color: black"> Administer </q-item-section>
             </q-item>
           </q-list>
         </q-scroll-area>
@@ -36,44 +43,46 @@
       </q-drawer>
 
       <q-page-container>
-        <q-page padding>
-          <div class="q-pa-md column">
-            <div class="q-pa-md row justify-end">
-              <q-btn color="secondary" label="新增" @click="modifyNotice()" />
-            </div>
-
-            <q-table
-              title="notice list"
-              :rows="rows"
-              :columns="columns"
-              row-key="operation"
-              v-model:selected="selected"
-            >
-              <template v-slot:body-cell-operation="props">
-                <td class="text-right td-text">
-                  <q-btn
-                    color="secondary"
-                    label="编辑"
-                    @click="() => modifyNotice(props)"
-                  />
-                </td>
-              </template>
-            </q-table>
-          </div>
-        </q-page>
+        <router-view />
       </q-page-container>
     </q-layout>
   </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
-import useMainLayout from 'src/hooks/useMainLayout';
+<script lang="ts">
+import path from 'path/posix';
+import { defineComponent, ref } from 'vue';
+import { useStore } from 'vuex';
+
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'MainLayout',
   setup() {
-    return useMainLayout();
+    const title = ref('ChainAdmin');
+    const router = useRouter();
+    const store = useStore();
+
+    const loginout = async () => {
+      store.dispatch('setAccount', undefined);
+      router.push({ path: '/login' });
+    };
+
+    const pageTo = (path: string) => {
+      if (path == 'admin') {
+        title.value = '管理员设置';
+      }
+
+      if (path == 'notice') {
+        title.value = '通知设置';
+      }
+
+      router.push({
+        path: path,
+      });
+    };
+
+    return { title, pageTo, loginout, drawer: ref(false) };
   },
 });
 </script>
@@ -87,5 +96,4 @@ export default defineComponent({
 .td-text {
   font-size: 100px;
 }
-
 </style>
