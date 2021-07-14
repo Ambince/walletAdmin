@@ -62,6 +62,7 @@ export default defineComponent({
     const title = ref('ChainAdmin');
     const router = useRouter();
     const store = useStore();
+    const account = store.state.account?.accountName;
 
     const loginout = async () => {
       store.dispatch('setAccount', undefined);
@@ -82,7 +83,7 @@ export default defineComponent({
       });
     };
 
-    return { title, pageTo, loginout, drawer: ref(false) };
+    return { title, pageTo, loginout, drawer: ref(false), account };
   },
 });
 </script>
