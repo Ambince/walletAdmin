@@ -88,7 +88,7 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: true,
-      port: 15000,
+      port: 8080,
       open: true // opens browser window automatically
     },
 
@@ -158,9 +158,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'ChainBowSV',
-        short_name: 'ChainBow',
-        description: 'A BSV Wallet',
+        name: 'ChainbowAdmin',
+        short_name: 'ChainbowAdmin',
+        description: 'ChainbowAdmin',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -205,7 +205,7 @@ module.exports = configure(function (ctx) {
       hideSplashscreen: true,
       iosStatusBarPadding: true,
       capacitorCliPreparationParams: ['sync', ctx.targetName],
-      appName: 'bsvwallet'
+      appName: 'ChainbowAdmin'
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
@@ -227,11 +227,11 @@ module.exports = configure(function (ctx) {
 
       builder: {
         // https://www.electron.build/configuration/configuration
-        appId: 'io.chainbow.bsvwallet',
+        appId: 'io.chainbow.admin',
         productName: 'ChainBow',
         copyright: 'Copyright © 2021 ChainBow Co. Ltd.',
         protocols: {
-          name: 'ChainBow',
+          name: 'ChainbowAdmin',
           schemes: ['chainbow', 'bitcoin']
         },
         mac: {

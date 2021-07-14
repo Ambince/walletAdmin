@@ -16,7 +16,7 @@
               <q-item-section avatar>
                 <q-icon name="img:bell.svg" />
               </q-item-section>
-              <q-item-section> Notice </q-item-section>
+              <q-item-section style="color: black"> Notice </q-item-section>
             </q-item>
           </q-list>
         </q-scroll-area>
@@ -30,7 +30,7 @@
             <q-avatar size="56px" class="q-mb-sm">
               <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
             </q-avatar>
-            <div class="text-weight-bold">{{account}}</div>
+            <div class="text-weight-bold">{{ account }}</div>
           </div>
         </q-img>
       </q-drawer>
@@ -39,7 +39,6 @@
         <q-page padding>
           <div class="q-pa-md column">
             <div class="q-pa-md row justify-end">
-
               <q-btn color="secondary" label="新增" @click="modifyNotice()" />
             </div>
 
@@ -57,8 +56,6 @@
                     label="编辑"
                     @click="() => modifyNotice(props)"
                   />
-
-
                 </td>
               </template>
             </q-table>
@@ -90,4 +87,5 @@ export default defineComponent({
 .td-text {
   font-size: 100px;
 }
+
 </style>

@@ -1,14 +1,13 @@
 {
-  "name": "bsvdapp",
+  "name": "ChainbowAdmin",
   "version": "0.1.0",
-  "description": "ChainBow DApp demo",
-  "productName": "ChainBow DApp demo",
-  "author": "ChainBow Team",
+  "description": "ChainbowAdmin",
+  "productName": "ChainbowAdmin",
+  "author": "Chainbow Admin",
   "private": true,
   "scripts": {
     "dev": "npx quasar dev",
     "build": "npx quasar build --debug",
-    "build:cocos": "/Applications/CocosCreator/Creator/2.3.2/CocosCreator.app/Contents/MacOS/CocosCreator --path ../ddz_client --build 'platform=web-desktop;debug=true'",
     "lint": "eslint --ext .js,.ts,.vue ./",
     "lint:fix": "eslint --fix --ext .js,.vue ./",
     "test": "jest"
