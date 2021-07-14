@@ -6,6 +6,8 @@ import NoticeDialog from 'src/components/NoticeDialog.vue';
 import axios from 'axios';
 import { Notice } from './Notice';
 import { useStore } from 'src/store';
+import { useRoute ,useRouter} from 'vue-router';
+import { stringify } from 'querystring';
 
 const columns = [
   {
@@ -45,12 +47,16 @@ function getNoticeList() {
 export default function useMainLayout() {
   const selected = ref([]);
   const $q = useQuasar();
+  const route = useRoute();
   const data = reactive({
     rows: [] as Notice[],
+    account:route.query.account,
   });
+
 
   onMounted(async () => {
     data.rows = (await getNoticeList()) as Notice[];
+
   });
 
   const modifyNotice = (props: any) => {

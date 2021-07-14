@@ -9,6 +9,7 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { configure } = require('quasar/wrappers');
+const path = require('path');
 
 module.exports = configure(function (ctx) {
   return {
@@ -19,7 +20,7 @@ module.exports = configure(function (ctx) {
           enabled: true,
           files: './src/**/*.{ts,tsx,js,jsx,vue}',
         },
-      },
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli/prefetch-feature
@@ -28,10 +29,16 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ['i18n', 'axios'],
+    boot: [
+      'i18n',
+      'axios',
+      'booting-misc',
+    ],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
-    css: ['app.scss'],
+    css: [
+      'app.scss'
+    ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -49,7 +56,8 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      devtool: 'source-map',
+      vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // transpile: false,
 
@@ -58,7 +66,7 @@ module.exports = configure(function (ctx) {
       // Applies only if "transpile" is set to true.
       // transpileDependencies: [],
 
-      // rtl: true, // https://v2.quasar.dev/options/rtl-support
+      // rtl: false, // https://v2.quasar.dev/options/rtl-support
       // preloadChunks: true,
       // showProgress: false,
       // gzip: true,
@@ -69,26 +77,38 @@ module.exports = configure(function (ctx) {
 
       // https://v2.quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpack(/* chain */) {
-        //
+      chainWebpack(chain) {
+        if (ctx.mode.capacitor) {
+          chain.resolve.alias.set('net', path.resolve(__dirname, 'node_modules/net-browserify'))
+          chain.resolve.alias.set('tls', path.resolve(__dirname, 'node_modules/tls-browserify'))
+        }
       },
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
-      https: false,
-      port: 8080,
-      open: true, // opens browser window automatically
+      https: true,
+      port: 15000,
+      open: true // opens browser window automatically
     },
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
-      config: {},
+      config: {
+        dark: false, // or Boolean true/false
+        capacitor: {
+          iosStatusBarPadding: true,// Quasar handles app exit on mobile phone back button.
+          backButtonExit: true / '*' / ['/login', '/home', '/my-page'],
+          // On the other hand, the following completely
+          // disables Quasar's back button management.
+          backButton: true // add the dynamic top padding on iOS mobile devices
+        }
+      },
 
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
 
-      // For special cases outside of where the auto-import strategy can have an impact
+      // For special cases outside of where the auto-import stategy can have an impact
       // (like functional components as one of the examples),
       // you can manually specify Quasar components/directives to be available everywhere:
       //
@@ -97,13 +117,9 @@ module.exports = configure(function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'Notify',
-        'Dialog',
-        'Loading',
-        'LoadingBar',
-        'LocalStorage',
-        'SessionStorage',
-      ],
+        'Notify', 'Dialog', 'Loading', 'LoadingBar',
+        'LocalStorage', 'SessionStorage'
+      ]
     },
 
     // animations: 'all', // --- includes all animations
@@ -113,10 +129,7 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
       pwa: false,
-
       // manualStoreHydration: true,
-      // manualPostHydrationTrigger: true,
-
       prodPort: 3000, // The default port that the production server should use
       // (gets superseded if process.env.PORT is specified at runtime)
 
@@ -129,8 +142,8 @@ module.exports = configure(function (ctx) {
 
       middlewares: [
         ctx.prod ? 'compression' : '',
-        'render', // keep this as last one
-      ],
+        'render' // keep this as last one
+      ]
     },
 
     // https://v2.quasar.dev/quasar-cli/developing-pwa/configuring-pwa
@@ -145,9 +158,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'Quasar App',
-        short_name: 'Quasar App',
-        description: 'A Quasar Framework app',
+        name: 'ChainBowSV',
+        short_name: 'ChainBow',
+        description: 'A BSV Wallet',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -156,30 +169,30 @@ module.exports = configure(function (ctx) {
           {
             src: 'icons/icon-128x128.png',
             sizes: '128x128',
-            type: 'image/png',
+            type: 'image/png'
           },
           {
             src: 'icons/icon-192x192.png',
             sizes: '192x192',
-            type: 'image/png',
+            type: 'image/png'
           },
           {
             src: 'icons/icon-256x256.png',
             sizes: '256x256',
-            type: 'image/png',
+            type: 'image/png'
           },
           {
             src: 'icons/icon-384x384.png',
             sizes: '384x384',
-            type: 'image/png',
+            type: 'image/png'
           },
           {
             src: 'icons/icon-512x512.png',
             sizes: '512x512',
-            type: 'image/png',
-          },
-        ],
-      },
+            type: 'image/png'
+          }
+        ]
+      }
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
@@ -190,40 +203,87 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
     capacitor: {
       hideSplashscreen: true,
+      iosStatusBarPadding: true,
+      capacitorCliPreparationParams: ['sync', ctx.targetName],
+      appName: 'bsvwallet'
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
     electron: {
-      bundler: 'packager', // 'packager' or 'builder'
+      bundler: 'builder', // 'packager' or 'builder'
 
-      packager: {
-        // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-        // OS X / Mac App Store
-        // appBundleId: '',
-        // appCategoryType: '',
-        // osxSign: '',
-        // protocol: 'myapp://path',
-        // Windows only
-        // win32metadata: { ... }
-      },
+      // packager: {
+      //   // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
+
+      //   // OS X / Mac App Store
+      //   // appBundleId: '',
+      //   // appCategoryType: '',
+      //   // osxSign: '',
+      //   // protocol: 'myapp://path',
+
+      //   // Windows only
+      //   // win32metadata: { ... }
+      // },
 
       builder: {
         // https://www.electron.build/configuration/configuration
-
-        appId: 'admin',
+        appId: 'io.chainbow.bsvwallet',
+        productName: 'ChainBow',
+        copyright: 'Copyright © 2021 ChainBow Co. Ltd.',
+        protocols: {
+          name: 'ChainBow',
+          schemes: ['chainbow', 'bitcoin']
+        },
+        mac: {
+          category: 'public.app-category.productivity',
+          artifactName: '${productName}-${version}-${os}.${ext}',
+          target: [
+            'dmg',
+            'zip'
+          ],
+          publish: ['github']
+        },
+        win: {
+          target: 'nsis',
+          icon: 'build/icon.ico',
+          artifactName: '${productName}-${version}-${os}.${ext}',
+          publish: ['github']
+        },
+        linux: {
+          target: 'AppImage',
+          publish: ['github']
+        },
+        nsis: {
+          deleteAppDataOnUninstall: true,
+          createDesktopShortcut: 'always'
+          // include: 'nsis.nsh'
+        },
+        publish: null
+        // publish: {
+        //   'provider': 's3',
+        //   'bucket': 'myS3bucket'
+        // }
       },
 
-      // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpack(/* chain */) {
-        // do something with the Electron main process Webpack cfg
-        // extendWebpackMain also available besides this chainWebpackMain
+      // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
+      nodeIntegration: true,
+
+      // was renamed from chainWebpack()
+      chainWebpackMain(chain) {
       },
 
-      // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpackPreload(/* chain */) {
-        // do something with the Electron main process Webpack cfg
-        // extendWebpackPreload also available besides this chainWebpackPreload
+      // was renamed from extendWebpack()
+      extendWebpackMain(cfg) {
+        cfg.devtool = 'source-map'
+        console.log(cfg)
       },
-    },
-  };
+
+      // New!
+      chainWebpackPreload(chain) {
+      },
+
+      // New!
+      extendWebpackPreload(cfg) { /* ... */ },
+    }
+  }
 });

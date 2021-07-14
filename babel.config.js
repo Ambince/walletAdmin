@@ -1,15 +1,20 @@
 /* eslint-env node */
-
-module.exports = api => {
-  return {
-    presets: [
-      [
-        '@quasar/babel-preset-app',
-        api.caller(caller => caller && caller.target === 'node')
-          ? { targets: { node: 'current' } }
-          : {}
-      ]
-    ]
-  }
+module.exports = {
+  presets: [
+    '@quasar/babel-preset-app',
+    ['@babel/preset-env', { 'modules': 'auto' }],
+    '@babel/preset-typescript'
+  ],
+  plugins: [
+    ['@babel/plugin-proposal-class-properties'],
+    [
+      'babel-plugin-rewrite-require',
+      {
+        aliases: {
+          net: 'net-browserify',
+          tls: 'tls-browserify',
+        },
+      },
+    ],
+  ]
 }
-
