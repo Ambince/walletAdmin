@@ -22,11 +22,11 @@
 
           <q-editor v-model="content" :toolbar="toolbar" :fonts="font" />
           <div class="row justify-center q-mt-lg">
-            <q-btn label="Submit" color="primary" @click="pushNotice" />
+            <q-btn label="Submit" color="secondary" @click="pushNotice" />
             <q-btn
               label="Reset"
               type="reset"
-              color="primary"
+              color="secondary"
               flat
               class="q-ml-sm"
             />

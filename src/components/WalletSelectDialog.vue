@@ -3,25 +3,13 @@
     <q-card class="q-dialog-plugin">
       <q-card-section>
         <div class="row justify-between items-center">
-          <div class="text-h6">Connect Your Wallet</div>
+          <div class="text-h6">Login by wallet</div>
           <q-btn flat round v-close-popup icon="close" />
         </div>
         <q-field rounded outlined stack-label>
           <template v-slot:control>
-            <div>
-              通过连接钱包，您同意接受 chainbow.io 的<a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://chainbow.io"
-                class="sc-iwsKbI bmteUK"
-                >服务条款</a
-              >，并确认您已阅读和理解<a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://chainbow.io/disclaimer/"
-                class="sc-iwsKbI bmteUK"
-                >chainbow协议免责声明</a
-              >。
+            <div class="q-pl-md">
+              使用管理员钱包扫码二维码登陆Chainbow管理后台  
             </div>
           </template>
         </q-field>
@@ -64,14 +52,10 @@ export default defineComponent({
   emits: [...useDialogPluginComponent.emits],
   setup(props) {
     const data = reactive({
-      wallets: [
-        { name: 'WalletConnect', icon: '/walletconnection.svg' },
-        { name: 'HandCash', icon: '/handcash_green_icon_2x.png' },
-        { name: 'MoneyButton', icon: '/moneybutton.jpeg' },
-        { name: 'Relayx', icon: '/relayx.svg' },
-      ],
+      wallets: [{ name: 'WalletConnect', icon: '/walletconnection.svg' }],
     });
-    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent();
+    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
+      useDialogPluginComponent();
     return {
       ...toRefs(data),
       dialogRef,

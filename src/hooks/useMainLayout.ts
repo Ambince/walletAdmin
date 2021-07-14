@@ -5,9 +5,10 @@ import { useQuasar } from 'quasar';
 import NoticeDialog from 'src/components/NoticeDialog.vue';
 import axios from 'axios';
 import { Notice } from './Notice';
-import { useStore } from 'src/store';
-import { useRoute ,useRouter} from 'vue-router';
-import { stringify } from 'querystring';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { StateInterface } from 'src/store';
+
 
 const columns = [
   {
@@ -48,15 +49,25 @@ export default function useMainLayout() {
   const selected = ref([]);
   const $q = useQuasar();
   const route = useRoute();
+  const router = useRouter();
+  const store = useStore<StateInterface>();
+
   const data = reactive({
     rows: [] as Notice[],
-    account:route.query.account,
+    account: store.state.account?.accountName,
   });
+
+
+  // 退出登陆
+  const loginout = async () => {
+    store.dispatch('setAccount', undefined);
+    router.push({ path: '/' });
+  };
+
 
 
   onMounted(async () => {
     data.rows = (await getNoticeList()) as Notice[];
-
   });
 
   const modifyNotice = (props: any) => {
@@ -75,5 +86,6 @@ export default function useMainLayout() {
     drawer: ref(false),
     modifyNotice,
     ...toRefs(data),
+    loginout
   };
 }

@@ -23,7 +23,7 @@ export interface StateInterface {
   pushToken: string;
   witnessOnline: boolean;
   account:
-    | { merchant: 'handcash' | 'moneybutton' | 'relayx'; authToken: string; refreshToken?: string; payload?: any }
+    | { merchant: 'handcash' | 'moneybutton' | 'relayx'; authToken: string; refreshToken?: string; payload?: any ;accountName:string}
     | undefined;
 }
 

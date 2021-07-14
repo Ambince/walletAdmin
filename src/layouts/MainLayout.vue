@@ -5,6 +5,7 @@
         <q-toolbar>
           <q-toolbar-title>Notice</q-toolbar-title>
           <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+          <q-btn flat @click="loginout" label="登出"></q-btn>
         </q-toolbar>
       </q-header>
 
@@ -38,7 +39,8 @@
         <q-page padding>
           <div class="q-pa-md column">
             <div class="q-pa-md row justify-end">
-              <q-btn color="primary" label="新增" @click="modifyNotice()" />
+
+              <q-btn color="secondary" label="新增" @click="modifyNotice()" />
             </div>
 
             <q-table
@@ -51,10 +53,12 @@
               <template v-slot:body-cell-operation="props">
                 <td class="text-right td-text">
                   <q-btn
-                    color="primary"
+                    color="secondary"
                     label="编辑"
                     @click="() => modifyNotice(props)"
                   />
+
+
                 </td>
               </template>
             </q-table>

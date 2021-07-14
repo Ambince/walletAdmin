@@ -28,7 +28,7 @@
     "pouchdb": "^7.2.2",
     "pouchdb-adapter-cordova-sqlite": "^2.0.8",
     "pouchdb-adapter-leveldb": "^7.2.2",
-    "quasar": "2.0.0-beta.12",
+    "quasar": "^2.0.0",
     "tiny-emitter": "^2.1.0",
     "vue-device-detector": "^1.1.6"
   },

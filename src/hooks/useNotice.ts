@@ -141,11 +141,11 @@ export default function useNotice(props: any) {
       notice = new Notice(data.title, data.content, data.lang.value);
     }
 
-    const pushNoticeUrl = 'http://192.168.1.3/v1/pushServerNotice';
+    const pushNoticeUrl = 'http://127.0.0.1/v1/pushServerNotice';
     axios.post(pushNoticeUrl, notice).then(res => {});
     onDialogHide();
     // 刷新主页面
-    // router.go(0);
+    router.go(0); 
   };
 
   const checkInputFormat = () => {
