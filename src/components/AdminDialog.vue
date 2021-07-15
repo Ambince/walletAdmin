@@ -6,7 +6,7 @@
           <q-input
             :rules="[() => checkInputFormat()]"
             reactive-rules
-            v-model="title"
+            v-model="name"
             label="管理员账号"
             stack-label
             style="width: 100%"
@@ -22,11 +22,12 @@
 </template>
 
 <script>
-import { defineComponent, toRefs,reactive } from 'vue';
+import { defineComponent, toRefs, reactive } from 'vue';
 import { useDialogPluginComponent, useQuasar } from 'quasar';
 
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { AdminInfo } from 'src/hooks/AdminInfo';
 
 export default defineComponent({
   name: 'NoticeDialog',
@@ -40,29 +41,40 @@ export default defineComponent({
     const $q = useQuasar();
     const router = useRouter();
 
-    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
-      useDialogPluginComponent();
-
     const data = reactive({
-      title: '',
-      content: '',
+      name: '',
       dialog: false,
       position: 'top',
     });
+    if (props.row) {
+      data.name = props.row.name;
+    }
+
+    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
+      useDialogPluginComponent();
+
     const pushAdmin = () => {
       if (!checkInputFormat()) {
         data.dialog = true;
         return;
       }
-      // const pushNoticeUrl = 'http://127.0.0.1/v1/pushServerNotice';
-      // axios.post(pushNoticeUrl, notice).then((res) => {});
+      let pushUrl;
+      let admin;
+      if (props.row) {
+        pushUrl = 'http://127.0.0.1/v1/updateAdmin';
+        admin = new AdminInfo(data.name,props.row.id);
+      } else {
+        pushUrl = 'http://127.0.0.1/v1/addAdmin';
+        admin = new AdminInfo(data.name);
+      }
+      axios.post(pushUrl, admin).then((res) => {});
       onDialogHide();
       // 刷新主页面
       router.go(0);
     };
 
     const checkInputFormat = () => {
-      return data.title ? true : false;
+      return data.name ? true : false;
     };
 
     return {

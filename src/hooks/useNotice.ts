@@ -4,6 +4,7 @@ import { reactive, toRefs, ref, watch } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 function useEditor() {
   const $q = useQuasar();
@@ -93,6 +94,8 @@ export default function useNotice(props: any) {
   const $q = useQuasar();
   const router = useRouter();
   const { toolbar, font } = useEditor();
+  const store = useStore();
+
   const {
     dialogRef,
     onDialogHide,
@@ -112,6 +115,8 @@ export default function useNotice(props: any) {
       { label: 'English', value: 'en' }
     ]
   });
+  const account = store.state.account?.accountName;
+
 
   if (props.row) {
     data.title = props.row.title;
@@ -123,6 +128,7 @@ export default function useNotice(props: any) {
       data.lang = choiceOption;
     }
   }
+
   const pushNotice = () => {
     if (!checkInputFormat() || !checkEditorFormat()) {
       data.dialog = true;
@@ -140,12 +146,13 @@ export default function useNotice(props: any) {
     } else {
       notice = new Notice(data.title, data.content, data.lang.value);
     }
+    notice.name = account;
 
     const pushNoticeUrl = 'http://127.0.0.1/v1/pushServerNotice';
-    axios.post(pushNoticeUrl, notice).then(res => {});
+    axios.post(pushNoticeUrl, notice).then(res => { });
     onDialogHide();
     // 刷新主页面
-    router.go(0); 
+    router.go(0);
   };
 
   const checkInputFormat = () => {

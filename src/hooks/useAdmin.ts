@@ -4,7 +4,7 @@ import { useQuasar } from 'quasar';
 
 import AdminDialog from 'src/components/AdminDialog.vue';
 import axios from 'axios';
-import { Notice } from './Notice';
+import { AdminInfo } from './AdminInfo';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { StateInterface } from 'src/store';
@@ -18,8 +18,7 @@ const columns = [
     field: 'id',
     sortable: true,
   },
-  { name: 'admin', label: 'admin', field: 'admin' },
-
+  { name: 'name', label: 'name', field: 'name' },
   {
     name: 'time',
     label: 'time',
@@ -34,9 +33,9 @@ const columns = [
   },
 ];
 
-function getNoticeList() {
+function getAdminList() {
   return axios
-    .get('http://127.0.0.1/v1/pullServerAdmin')
+    .get('http://127.0.0.1/v1/allAdmin')
     .then(function (response) {
       return response.data.result;
     })
@@ -53,16 +52,14 @@ export default function useAdmin() {
   const store = useStore<StateInterface>();
 
   const data = reactive({
-    rows: [] as Notice[],
+    rows: [] as AdminInfo[],
     account: store.state.account?.accountName,
   });
 
 
 
-
-
   onMounted(async () => {
-    data.rows = (await getNoticeList()) as Notice[];
+    data.rows = (await getAdminList()) as AdminInfo[];
   });
 
   const modifyAdmin = (props: any) => {
