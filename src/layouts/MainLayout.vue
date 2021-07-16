@@ -70,7 +70,6 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      console.log('Amence MainLayout', store.state.account?.accountName);
       if (!store.state.account?.accountName) {
         loginout();
       }

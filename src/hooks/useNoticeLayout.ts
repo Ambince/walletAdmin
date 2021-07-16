@@ -65,7 +65,6 @@ export default function useNoticeLayout() {
   });
 
   watch(() => (data.lang), async () => {
-    console.log('Amence watch lang', data.lang.value);
     data.rows = (await getNoticeList(data.lang.value)) as Notice[];
   });
 

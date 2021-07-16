@@ -38,7 +38,7 @@ function getAdminList() {
   return axios
     .get(backServerUrl+'/v1/allAdmin')
     .then(function (response) {
-      console.log('Amence allAdmin',response.data.result);
+
       return response.data.result;
     })
     .catch(function (error) {

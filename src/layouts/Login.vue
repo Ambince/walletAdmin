@@ -135,7 +135,6 @@ export default {
     };
 
     const checkOrSaveAccount = async (accountName: string) => {
-      console.log('Amence checkOrSaveAccount', accountName);
       // 服务器检查用户权限
       const checked = await checkAdmin(accountName);
       if (!checked) {
@@ -144,15 +143,10 @@ export default {
         login();
         return;
       }
-      console.log('Amence checkOrSaveAccount checked', checked);
 
       store.dispatch('setAccount', {
         accountName: accountName,
       });
-      console.log(
-        ' Amence checkOrSaveAccount store.state.account',
-        store.state.account
-      );
       // 进入首页
       router.push({
         path: '/index',
@@ -160,13 +154,11 @@ export default {
     };
 
     const checkAdmin = (accountName: string) => {
-      console.log('Amence backUrl', backServerUrl + '/v1/checkAdmin');
       return axios
         .get(backServerUrl + '/v1/checkAdmin', {
           params: { name: accountName },
         })
         .then(function (response) {
-          console.log('Amence checkAdmin return', response.data.result);
           return response.data.result;
         })
         .catch(function (error) {
