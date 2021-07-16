@@ -1,4 +1,4 @@
-import { ref, reactive, onMounted, toRefs } from 'vue';
+import { ref, reactive, onMounted, toRefs, watch } from 'vue';
 // import { useQuasar } from 'quasar';
 import { useQuasar } from 'quasar';
 
@@ -8,6 +8,8 @@ import { Notice } from './Notice';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { StateInterface } from 'src/store';
+import { backServerUrl } from 'src/utils/index';
+
 
 
 const columns = [
@@ -34,9 +36,11 @@ const columns = [
   },
 ];
 
-function getNoticeList() {
+function getNoticeList(lang: string) {
   return axios
-    .get('http://127.0.0.1/v1/pullServerNotice')
+    .get(backServerUrl + '/v1/pullServerNotice', {
+      params: { lang: lang },
+    })
     .then(function (response) {
       return response.data.result;
     })
@@ -53,9 +57,16 @@ export default function useNoticeLayout() {
   const data = reactive({
     rows: [] as Notice[],
     account: store.state.account?.accountName,
+    lang: { label: '中文', value: 'zh' },
+    options: [{ label: '中文', value: 'zh' }, { label: '日语', value: 'ja' }, { label: 'English', value: 'en' }]
   });
   onMounted(async () => {
-    data.rows = (await getNoticeList()) as Notice[];
+    data.rows = (await getNoticeList(data.lang.value)) as Notice[];
+  });
+
+  watch(() => (data.lang), async () => {
+    console.log('Amence watch lang', data.lang.value);
+    data.rows = (await getNoticeList(data.lang.value)) as Notice[];
   });
 
   const modifyNotice = (props: any) => {

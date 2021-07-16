@@ -1,5 +1,7 @@
 <template>
-  <div class="q-pa-md"></div>
+  <div class="q-pa-md relative-position">
+    <q-btn label="点击登陆" @click="login" class="fixed-center" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -27,6 +29,7 @@ import { StateInterface } from 'src/store';
 import { useStore } from 'vuex';
 
 import { init } from 'src/utils/fullscreen';
+import { backServerUrl } from 'src/utils/index';
 import axios from 'axios';
 
 export interface AccountBalances {
@@ -86,7 +89,7 @@ export default {
           resetApp();
           // 退出到登陆
           router.push({
-            path: '/login',
+            path: '/',
           });
         }
       );
@@ -141,22 +144,29 @@ export default {
         login();
         return;
       }
+      console.log('Amence checkOrSaveAccount checked', checked);
 
       store.dispatch('setAccount', {
         accountName: accountName,
       });
+      console.log(
+        ' Amence checkOrSaveAccount store.state.account',
+        store.state.account
+      );
       // 进入首页
       router.push({
-        path: '/',
+        path: '/index',
       });
     };
 
     const checkAdmin = (accountName: string) => {
+      console.log('Amence backUrl', backServerUrl + '/v1/checkAdmin');
       return axios
-        .get('http://127.0.0.1/v1/chckAdmin', {
-          params: { accountName: accountName },
+        .get(backServerUrl + '/v1/checkAdmin', {
+          params: { name: accountName },
         })
         .then(function (response) {
+          console.log('Amence checkAdmin return', response.data.result);
           return response.data.result;
         })
         .catch(function (error) {
@@ -221,7 +231,6 @@ export default {
 
     // 初始化socket
     onMounted(async () => {
-      console.log('Amence store.state.account', store.state.account);
       store.state.account ? null : resetApp();
       data.client = await Client.init({
         relayProvider: DEFAULT_RELAY_PROVIDER,
@@ -232,7 +241,7 @@ export default {
       login();
     });
 
-    return {};
+    return { login };
   },
 };
 </script>

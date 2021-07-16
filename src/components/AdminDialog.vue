@@ -18,6 +18,17 @@
         </div>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="dialog" :position="position">
+      <q-card class="dialog-tip">
+        <q-card-section>
+          <div class="row justify-center">
+            <q-icon></q-icon>
+            <label>{{ tipInfo }}</label>
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -28,6 +39,7 @@ import { useDialogPluginComponent, useQuasar } from 'quasar';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { AdminInfo } from 'src/hooks/AdminInfo';
+import { backServerUrl } from 'src/utils/index';
 
 export default defineComponent({
   name: 'NoticeDialog',
@@ -45,11 +57,12 @@ export default defineComponent({
       name: '',
       dialog: false,
       position: 'top',
+      tipInfo: '请输入完整内容',
     });
     if (props.row) {
+      // eslint-disable-next-line vue/no-setup-props-destructure
       data.name = props.row.name;
     }
-
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
 
@@ -61,16 +74,23 @@ export default defineComponent({
       let pushUrl;
       let admin;
       if (props.row) {
-        pushUrl = 'http://127.0.0.1/v1/updateAdmin';
-        admin = new AdminInfo(data.name,props.row.id);
+        pushUrl = backServerUrl + '/v1/updateAdmin';
+        admin = new AdminInfo(data.name, props.row.id);
       } else {
-        pushUrl = 'http://127.0.0.1/v1/addAdmin';
+        // pushUrl = backServerUrl + '/v1/addAdmin';
+        pushUrl = backServerUrl + '/v1/addAdmin';
+
         admin = new AdminInfo(data.name);
       }
-      axios.post(pushUrl, admin).then((res) => {});
-      onDialogHide();
-      // 刷新主页面
-      router.go(0);
+      axios.post(pushUrl, admin).then((res) => {
+        if (res.data.success) {
+          onDialogHide();
+          router.go(0);
+        } else {
+          data.dialog = true;
+          data.tipInfo = res.data.result;
+        }
+      });
     };
 
     const checkInputFormat = () => {

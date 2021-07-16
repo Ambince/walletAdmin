@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import path from 'path/posix';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 
 import { useRouter } from 'vue-router';
@@ -66,8 +66,15 @@ export default defineComponent({
 
     const loginout = async () => {
       store.dispatch('setAccount', undefined);
-      router.push({ path: '/login' });
+      router.push({ path: '/' });
     };
+
+    onMounted(async () => {
+      console.log('Amence MainLayout', store.state.account?.accountName);
+      if (!store.state.account?.accountName) {
+        loginout();
+      }
+    });
 
     const pageTo = (path: string) => {
       if (path == 'admin') {

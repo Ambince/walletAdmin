@@ -5,6 +5,8 @@ import { useDialogPluginComponent } from 'quasar';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { backServerUrl } from 'src/utils/index';
+
 
 function useEditor() {
   const $q = useQuasar();
@@ -108,6 +110,7 @@ export default function useNotice(props: any) {
     content: '',
     dialog: false,
     position: 'top',
+    noticeTip: '请输入完整内容',
     lang: { label: 'English', value: 'en' },
     options: [
       { label: '中文', value: 'zh' },
@@ -148,11 +151,18 @@ export default function useNotice(props: any) {
     }
     notice.name = account;
 
-    const pushNoticeUrl = 'http://127.0.0.1/v1/pushServerNotice';
-    axios.post(pushNoticeUrl, notice).then(res => { });
-    onDialogHide();
-    // 刷新主页面
-    router.go(0);
+    const pushNoticeUrl = backServerUrl + '/v1/pushServerNotice';
+    axios.post(pushNoticeUrl, notice).then(res => {
+      if (res.data.success) {
+        onDialogHide();
+        // 刷新主页面
+        router.go(0);
+        return;
+      }
+      data.dialog = true;
+      data.noticeTip = res.data.result;
+    });
+
   };
 
   const checkInputFormat = () => {

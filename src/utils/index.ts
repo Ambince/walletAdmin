@@ -11,3 +11,9 @@ export const DEFAULT_METHODS = {
   pay: 'pay',
   signOutputsAndBroadcast: 'signOutputsAndBroadcast',
 };
+
+// export const backServerUrl = 'http://127.0.0.1:8088';
+export const backServerUrl = 'http://139.162.125.233:8088';
+// export const backServerUrl = 'http://121.43.41.7:8088';
+
+

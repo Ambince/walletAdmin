@@ -8,6 +8,7 @@ import { AdminInfo } from './AdminInfo';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { StateInterface } from 'src/store';
+import { backServerUrl } from 'src/utils/index';
 
 
 const columns = [
@@ -35,8 +36,9 @@ const columns = [
 
 function getAdminList() {
   return axios
-    .get('http://127.0.0.1/v1/allAdmin')
+    .get(backServerUrl+'/v1/allAdmin')
     .then(function (response) {
+      console.log('Amence allAdmin',response.data.result);
       return response.data.result;
     })
     .catch(function (error) {

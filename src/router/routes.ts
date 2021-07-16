@@ -3,7 +3,7 @@ const routes: RouteRecordRaw[] = [];
 routes.push(
 
   {
-    path: '/',
+    path: '/index',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
@@ -21,7 +21,7 @@ routes.push(
     ]
   },
   {
-    path: '/login',
+    path: '/',
     component: () => import('layouts/Login.vue'),
   },
   {
