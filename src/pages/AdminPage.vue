@@ -1,37 +1,34 @@
 <template>
-  <q-page padding>
-    <div class="q-pa-md column">
-      <div class="q-pa-md row justify-end">
-        <q-btn color="secondary" label="新增" @click="modifyAdmin(null)" />
-      </div>
-
-      <q-table
-        title="Admin list"
-        :rows="rows"
-        :columns="columns"
-        row-key="operation"
-        v-model:selected="selected"
-      >
-        <template v-slot:body-cell-operation="props">
-          <td class="text-right td-text">
-            <q-btn
-              color="secondary"
-              label="编辑"
-              @click="() => modifyAdmin(props)"
-            />
-          </td>
-        </template>
-      </q-table>
+  <div class="q-pa-md">
+    <div class="q-pa-md row justify-end">
+      <q-btn color="secondary" label="新增" @click="modifyAdmin(null)" />
     </div>
-  </q-page>
+    <q-table
+      title="Admin list"
+      :rows="rows"
+      :columns="columns"
+      row-key="operation"
+      v-model:selected="selected"
+    >
+      <template v-slot:body-cell-operation="props">
+        <td class="text-right td-text">
+          <q-btn
+            color="secondary"
+            label="编辑"
+            @click="() => modifyAdmin(props)"
+          />
+        </td>
+      </template>
+    </q-table>
+  </div>
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import useAdmin from "src/hooks/useAdmin";
+import { defineComponent } from 'vue';
+import useAdmin from 'src/hooks/useAdmin';
 
 export default defineComponent({
-  name: "AdminPage",
+  name: 'AdminPage',
   setup() {
     return useAdmin();
   },

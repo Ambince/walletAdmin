@@ -59,7 +59,16 @@ export default function useNoticePage() {
     options: [{ label: '中文', value: 'zh' }, { label: '日语', value: 'ja' }, { label: 'English', value: 'en' }]
   });
   onMounted(async () => {
-    data.rows = (await getNoticeList(data.lang.value)) as NoticeInfo[];
+    const notice = new NoticeInfo("11111111111111","22222222222",1,1,"1111111111111111111");
+    data.rows.push(notice);
+    data.rows.push(notice);
+    data.rows.push(notice);
+    data.rows.push(notice);
+    data.rows.push(notice);
+    data.rows.push(notice);
+    data.rows.push(notice);
+    data.rows.push(notice);
+    // data.rows = (await getNoticeList(data.lang.value)) as NoticeInfo[];
   });
 
   watch(() => (data.lang), async () => {

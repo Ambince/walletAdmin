@@ -1,13 +1,14 @@
 <template>
-  <q-page padding>
-    <div class="q-pa-md column">
+  <q-page>
+    <div class="q-pa-md">
       <div class="q-pa-md row justify-end">
-        <q-select 
+        <q-select
           color="black"
           v-model="lang"
           :options="options"
-          label="选择语言"  
+          label="选择语言"
           class="lang-select"
+          virtual-scroll
         />
         <q-btn color="secondary" label="新增" @click="modifyNotice(null)" />
       </div>
