@@ -2,12 +2,12 @@
   <q-page padding>
     <div class="q-pa-md column">
       <div class="q-pa-md row justify-end">
-        <q-select
+        <q-select 
+          color="black"
           v-model="lang"
           :options="options"
-          label="选择语言"
+          label="选择语言"  
           class="lang-select"
-          input-style="background-color: #ff0000"
         />
         <q-btn color="secondary" label="新增" @click="modifyNotice(null)" />
       </div>
@@ -34,29 +34,28 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-import useNoticePage from "src/hooks/useNoticePage";
+import { defineComponent } from 'vue';
+import useNoticePage from 'src/hooks/useNoticePage';
 
 export default defineComponent({
-  name: "NoticePage",
+  name: 'NoticePage',
   setup() {
     return useNoticePage();
   },
 });
 </script>
 
-<style>
+<style scoped lang="scss">
 .drawer-area {
   height: calc(100% - 150px);
   margin-top: 150px;
   border-right: 1px solid;
 }
 .td-text {
-  font-size: 100px;
+  font-size: 1rem;
 }
-
 .lang-select {
-  width: 10rem;
   margin-right: 2rem;
+  width: 6rem;
 }
 </style>

@@ -40,7 +40,7 @@
         <q-card-section>
           <div class="row justify-center">
             <q-icon></q-icon>
-            <label>{{noticeTip}}</label>
+            <label>{{ noticeTip }}</label>
           </div>
         </q-card-section>
       </q-card>
@@ -57,19 +57,26 @@ export default defineComponent({
   name: 'NoticeDialog',
   props: {
     row: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   emits: [...useDialogPluginComponent.emits],
   setup(props) {
     return useNoticeDialog(props);
-  }
+  },
 });
 </script>
 
 <style scoped lang="scss">
-.q-dialog__inner--minimized > div {
-  max-width: 45%;
+@media screen and (min-width: 700px) {
+  .q-dialog__inner--minimized > div {
+    max-width: 50%;
+  }
+}
+@media screen and (max-width: 700px) {
+  .q-dialog__inner--minimized > div {
+    max-width: 100%;
+  }
 }
 
 .dialog-panel {

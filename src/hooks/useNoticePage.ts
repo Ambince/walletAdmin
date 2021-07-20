@@ -5,8 +5,8 @@ import NoticeDialog from 'src/components/NoticeDialog.vue';
 import axios from 'axios';
 import { NoticeInfo } from './model/NoticeInfo';
 import { useStore } from 'vuex';
-import { StateInterface } from 'src/store';
-import { backServerUrl } from 'src/utils/index';
+import { StateInterface } from '../store';
+import { backServerUrl } from '../utils/index';
 
 
 

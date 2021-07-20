@@ -45,6 +45,6 @@ export default defineComponent({
   border-right: 1px solid #ddd;
 }
 .td-text {
-  font-size: 100px;
+  font-size: 1rem;
 }
 </style>

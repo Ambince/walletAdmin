@@ -1,22 +1,17 @@
 <template>
   <div>
     <q-dialog ref="dialogRef">
-      <q-card>
-        <div class="dialog-panel">
-          <q-input
-            :rules="[() => checkInputFormat()]"
-            reactive-rules
-            v-model="name"
-            label="管理员账号"
-            stack-label
-            style="width: 100%"
-            class="dialog-panel-input"
-          />
-          <div class="row justify-center q-mt-lg">
-            <q-btn label="Submit" color="secondary" @click="pushAdmin" />
-          </div>
-        </div>
-      </q-card>
+      <div class="dialog-panel column items-center">
+        <q-input
+          :rules="[() => checkInputFormat()]"
+          reactive-rules
+          v-model="name"
+          label="管理员账号"
+          class="dialog-panel-input"
+        />
+
+        <q-btn label="Submit" color="secondary" @click="pushAdmin" />
+      </div>
     </q-dialog>
 
     <q-dialog v-model="dialog" :position="position">
@@ -111,20 +106,31 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.q-dialog__inner--minimized > div {
-  max-width: 45%;
+@media screen and (min-width: 700px) {
+  .q-dialog__inner--minimized > div {
+    max-width: 50%;
+  }
+  .dialog-panel {
+    width: 40%;
+  }
+}
+@media screen and (max-width: 700px) {
+  .q-dialog__inner--minimized > div {
+    max-width: 100%;
+  }
+  .dialog-panel {
+    width: 100%;
+  }
 }
 
 .dialog-panel {
   background: white;
   padding: 2rem;
-  width: 40rem;
 }
 .dialog-panel-input {
   width: 100%;
   margin-bottom: 2rem;
 }
-
 .dialog-tip {
   width: 25rem;
   color: red;

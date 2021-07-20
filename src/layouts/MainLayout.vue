@@ -3,8 +3,8 @@
     <q-header elevated class="bg-cyan-8">
       <q-toolbar>
         <q-toolbar-title>{{ title }}</q-toolbar-title>
-        <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
         <q-btn flat @click="logout" label="登出"></q-btn>
+        <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
       </q-toolbar>
     </q-header>
 
@@ -48,27 +48,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, reactive } from "vue";
-import { useStore } from "vuex";
-import { useRouter } from "vue-router";
-import { StateInterface } from "src/store";
-import useWalletConnect from "src/hooks/useWalletConnect";
+import { defineComponent, ref, onMounted, reactive } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { StateInterface } from 'src/store';
+import useWalletConnect from 'src/hooks/useWalletConnect';
 
 export default defineComponent({
-  name: "MainLayout",
+  name: 'MainLayout',
   setup() {
-    const title = ref("ChainAdmin");
+    const title = ref('ChainAdmin');
     const router = useRouter();
     const store = useStore<StateInterface>();
     const account = store.state.account?.accountName;
     const logout = () => {
       const { dataWC, disconnect } = useWalletConnect(false);
-      console.log("Amence dataWC login init", dataWC);
       if (dataWC.session?.topic) {
         disconnect(dataWC.session.topic);
       }
-      store.dispatch("setIndexReload", true);
-      console.log("Amence reload update finsh ", store.state.indexReload);
+      store.dispatch('setIndexReload', true);
     };
 
     onMounted(async () => {
@@ -78,11 +76,11 @@ export default defineComponent({
     });
 
     const pageTo = (path: string) => {
-      if (path == "admin") {
-        title.value = "管理员设置";
+      if (path == 'admin') {
+        title.value = '管理员设置';
       }
-      if (path == "notice") {
-        title.value = "通知设置";
+      if (path == 'notice') {
+        title.value = '通知设置';
       }
       router.push({ path: path });
     };
