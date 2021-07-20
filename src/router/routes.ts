@@ -4,25 +4,25 @@ routes.push(
 
   {
     path: '/index',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('src/layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('layouts/NoticeLayout.vue'),
+        component: () => import('src/pages/NoticePage.vue'),
       },
       {
         path: '/notice',
-        component: () => import('layouts/NoticeLayout.vue'),
+        component: () => import('src/pages/NoticePage.vue'),
       },
       {
         path: '/admin',
-        component: () => import('layouts/Admin.vue'),
+        component: () => import('src/pages/AdminPage.vue'),
       },
     ]
   },
   {
     path: '/',
-    component: () => import('layouts/Login.vue'),
+    component: () => import('src/layouts/LoginLayout.vue'),
   },
   {
     path: '/:catchAll(.*)*',

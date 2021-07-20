@@ -4,7 +4,7 @@ import { useQuasar } from 'quasar';
 
 import AdminDialog from 'src/components/AdminDialog.vue';
 import axios from 'axios';
-import { AdminInfo } from './AdminInfo';
+import { AdminInfo } from './model/AdminInfo';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { StateInterface } from 'src/store';

@@ -1,11 +1,9 @@
 import { ref, reactive, onMounted, toRefs, watch } from 'vue';
-// import { useQuasar } from 'quasar';
 import { useQuasar } from 'quasar';
 
 import NoticeDialog from 'src/components/NoticeDialog.vue';
 import axios from 'axios';
-import { Notice } from './Notice';
-import { useRoute, useRouter } from 'vue-router';
+import { NoticeInfo } from './model/NoticeInfo';
 import { useStore } from 'vuex';
 import { StateInterface } from 'src/store';
 import { backServerUrl } from 'src/utils/index';
@@ -49,23 +47,23 @@ function getNoticeList(lang: string) {
     });
 }
 
-export default function useNoticeLayout() {
+export default function useNoticePage() {
   const selected = ref([]);
   const $q = useQuasar();
   const store = useStore<StateInterface>();
 
   const data = reactive({
-    rows: [] as Notice[],
+    rows: [] as NoticeInfo[],
     account: store.state.account?.accountName,
     lang: { label: '中文', value: 'zh' },
     options: [{ label: '中文', value: 'zh' }, { label: '日语', value: 'ja' }, { label: 'English', value: 'en' }]
   });
   onMounted(async () => {
-    data.rows = (await getNoticeList(data.lang.value)) as Notice[];
+    data.rows = (await getNoticeList(data.lang.value)) as NoticeInfo[];
   });
 
   watch(() => (data.lang), async () => {
-    data.rows = (await getNoticeList(data.lang.value)) as Notice[];
+    data.rows = (await getNoticeList(data.lang.value)) as NoticeInfo[];
   });
 
   const modifyNotice = (props: any) => {

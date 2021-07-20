@@ -1,4 +1,4 @@
-export class Notice {
+export class NoticeInfo {
   id: number;
   time: Date;
   name: string;

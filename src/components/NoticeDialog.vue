@@ -40,7 +40,7 @@
         <q-card-section>
           <div class="row justify-center">
             <q-icon></q-icon>
-            <label>请输入完整内容</label>
+            <label>{{noticeTip}}</label>
           </div>
         </q-card-section>
       </q-card>
@@ -51,7 +51,7 @@
 <script>
 import { defineComponent, props } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
-import useNotice from 'src/hooks/useNotice';
+import useNoticeDialog from 'src/hooks/useNoticeDialog';
 
 export default defineComponent({
   name: 'NoticeDialog',
@@ -62,7 +62,7 @@ export default defineComponent({
   },
   emits: [...useDialogPluginComponent.emits],
   setup(props) {
-    return useNotice(props);
+    return useNoticeDialog(props);
   }
 });
 </script>

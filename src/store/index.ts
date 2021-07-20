@@ -23,8 +23,10 @@ export interface StateInterface {
   pushToken: string;
   witnessOnline: boolean;
   account:
-    | { merchant: 'handcash' | 'moneybutton' | 'relayx'; authToken: string; refreshToken?: string; payload?: any ;accountName:string}
-    | undefined;
+  | { merchant: 'handcash' | 'moneybutton' | 'relayx'; authToken: string; refreshToken?: string; payload?: any; accountName: string }
+  | undefined;
+  indexReload: boolean;
+
 }
 
 // provide typings for `this.$store`
@@ -34,6 +36,7 @@ declare module '@vue/runtime-core' {
   }
 }
 
+// @ts-ignore
 export default store(function (/* { ssrContext } */) {
   const Store = createStore<StateInterface>({
     state: {
@@ -50,6 +53,7 @@ export default store(function (/* { ssrContext } */) {
       pushToken: '', // FCM Token，使用Firebase Messaging
       witnessOnline: false,
       account: undefined,
+      indexReload: false,
     },
     getters: {
       convertUnit(state) {
@@ -108,6 +112,10 @@ export default store(function (/* { ssrContext } */) {
       setAccount(state, account) {
         state.account = account;
       },
+      setIndexReload(state, reload: boolean) {
+        state.indexReload = reload;
+      }
+
     },
     actions: {
       async initLocalState({ state, dispatch, commit }) {
@@ -121,6 +129,9 @@ export default store(function (/* { ssrContext } */) {
       saveRootState({ rootState }) {
         LocalStorage.set('rootState', rootState);
       },
+      setIndexReload({ commit, dispatch }, val: boolean) {
+        commit('setIndexReload', val);
+      }
     },
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only

@@ -1,5 +1,5 @@
 import { useQuasar } from 'quasar';
-import { Notice } from './Notice';
+import { NoticeInfo } from './model/NoticeInfo';
 import { reactive, toRefs, ref, watch } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
 import axios from 'axios';
@@ -92,7 +92,7 @@ function useEditor() {
   return { toolbar, font };
 }
 
-export default function useNotice(props: any) {
+export default function useNoticeDialog(props: any) {
   const $q = useQuasar();
   const router = useRouter();
   const { toolbar, font } = useEditor();
@@ -139,7 +139,7 @@ export default function useNotice(props: any) {
     }
     let notice;
     if (props.row) {
-      notice = new Notice(
+      notice = new NoticeInfo(
         data.title,
         data.content,
         data.lang.value,
@@ -147,7 +147,7 @@ export default function useNotice(props: any) {
         props.row.name
       );
     } else {
-      notice = new Notice(data.title, data.content, data.lang.value);
+      notice = new NoticeInfo(data.title, data.content, data.lang.value);
     }
     notice.name = account;
 
@@ -156,7 +156,7 @@ export default function useNotice(props: any) {
       if (res.data.success) {
         onDialogHide();
         // 刷新主页面
-        router.go(0);
+        router.push({ path: '/index' });
         return;
       }
       data.dialog = true;

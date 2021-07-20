@@ -38,7 +38,7 @@ import { useDialogPluginComponent, useQuasar } from 'quasar';
 
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { AdminInfo } from 'src/hooks/AdminInfo';
+import { AdminInfo } from 'src/hooks/model/AdminInfo';
 import { backServerUrl } from 'src/utils/index';
 
 export default defineComponent({
@@ -77,15 +77,15 @@ export default defineComponent({
         pushUrl = backServerUrl + '/v1/updateAdmin';
         admin = new AdminInfo(data.name, props.row.id);
       } else {
-        // pushUrl = backServerUrl + '/v1/addAdmin';
         pushUrl = backServerUrl + '/v1/addAdmin';
-
         admin = new AdminInfo(data.name);
       }
       axios.post(pushUrl, admin).then((res) => {
         if (res.data.success) {
           onDialogHide();
-          router.go(0);
+          router.push({
+            path: '/index',
+          });
         } else {
           data.dialog = true;
           data.tipInfo = res.data.result;
