@@ -124,6 +124,7 @@ export default function useNoticeDialog(props: any) {
   if (props.row) {
     data.title = props.row.title;
     data.content = props.row.content;
+    console.log("Amence select lang", props.row.lang);
     const choiceOption = data.options.find(
       item => item.value == props.row.lang
     );
@@ -148,6 +149,7 @@ export default function useNoticeDialog(props: any) {
       );
     } else {
       notice = new NoticeInfo(data.title, data.content, data.lang.value);
+      console.log('Amence 选中语言',data.lang);
     }
     notice.name = account;
 

@@ -17,6 +17,12 @@
             label="编辑"
             @click="() => modifyAdmin(props)"
           />
+          <q-btn
+            class="q-ml-sm"
+            color="red"
+            label="删除"
+            @click="() => deleteAmin(props)"
+          />
         </td>
       </template>
     </q-table>

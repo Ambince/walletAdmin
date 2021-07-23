@@ -3,6 +3,7 @@ import { ref, reactive, onMounted, toRefs } from 'vue';
 import { useQuasar } from 'quasar';
 
 import AdminDialog from 'src/components/AdminDialog.vue';
+import DeleteDialog from 'src/components/DeleteDialog.vue';
 import axios from 'axios';
 import { AdminInfo } from './model/AdminInfo';
 import { useRoute, useRouter } from 'vue-router';
@@ -36,7 +37,7 @@ const columns = [
 
 function getAdminList() {
   return axios
-    .get(backServerUrl+'/v1/allAdmin')
+    .get(backServerUrl + '/v1/allAdmin')
     .then(function (response) {
 
       return response.data.result;
@@ -59,7 +60,6 @@ export default function useAdmin() {
   });
 
 
-
   onMounted(async () => {
     data.rows = (await getAdminList()) as AdminInfo[];
   });
@@ -73,12 +73,24 @@ export default function useAdmin() {
     });
   };
 
+  const deleteAmin = (props: any) => {
+    $q.dialog({
+      component: DeleteDialog,
+      componentProps: {
+        row: props ? props.row : null,
+        type: 'admin',
+      },
+    });
+  };
+
+
+
   return {
     selected,
     columns,
     drawer: ref(false),
     modifyAdmin,
+    deleteAmin,
     ...toRefs(data),
-
   };
 }

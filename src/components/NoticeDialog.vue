@@ -7,6 +7,7 @@
             v-model="lang"
             :options="options"
             label="发布语言"
+            color="black"
             class="dialog-panel-input"
           />
 

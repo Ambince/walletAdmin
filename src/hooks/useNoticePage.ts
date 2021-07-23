@@ -2,6 +2,8 @@ import { ref, reactive, onMounted, toRefs, watch } from 'vue';
 import { useQuasar } from 'quasar';
 
 import NoticeDialog from 'src/components/NoticeDialog.vue';
+import DeleteDialog from 'src/components/DeleteDialog.vue';
+
 import axios from 'axios';
 import { NoticeInfo } from './model/NoticeInfo';
 import { useStore } from 'vuex';
@@ -18,17 +20,18 @@ const columns = [
     field: 'id',
     sortable: true,
   },
-  { name: 'name', label: 'name', field: 'name' },
-  { name: 'title', label: 'title', field: 'title' },
+  { name: 'lang', label: '语言 ', field: 'lang' },
+  { name: 'name', label: '发布人 ', field: 'name' },
+  { name: 'title', label: '通知主题', field: 'title' },
   {
     name: 'time',
-    label: 'time',
+    label: '发布时间',
     field: 'time',
     sortable: true,
   },
   {
     name: 'operation',
-    label: 'operation',
+    label: '操作',
     field: 'operation',
     required: true,
   },
@@ -59,16 +62,8 @@ export default function useNoticePage() {
     options: [{ label: '中文', value: 'zh' }, { label: '日语', value: 'ja' }, { label: 'English', value: 'en' }]
   });
   onMounted(async () => {
-    const notice = new NoticeInfo("11111111111111","22222222222",1,1,"1111111111111111111");
-    data.rows.push(notice);
-    data.rows.push(notice);
-    data.rows.push(notice);
-    data.rows.push(notice);
-    data.rows.push(notice);
-    data.rows.push(notice);
-    data.rows.push(notice);
-    data.rows.push(notice);
-    // data.rows = (await getNoticeList(data.lang.value)) as NoticeInfo[];
+    data.rows = (await getNoticeList(data.lang.value)) as NoticeInfo[];
+    console.log('Amence onMounted data.rows',data.rows);
   });
 
   watch(() => (data.lang), async () => {
@@ -84,10 +79,21 @@ export default function useNoticePage() {
     });
   };
 
+  const deleteNotice = (props: any) => {
+    $q.dialog({
+      component: DeleteDialog,
+      componentProps: {
+        row: props ? props.row : null,
+        type: 'notice',
+      },
+    });
+  }
+
   return {
     selected,
     columns,
     modifyNotice,
+    deleteNotice,
     ...toRefs(data)
 
   };

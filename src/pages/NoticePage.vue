@@ -27,6 +27,12 @@
               label="编辑"
               @click="() => modifyNotice(props)"
             />
+             <q-btn
+              class="q-ml-sm"
+              color="red"
+              label="删除"
+              @click="() => deleteNotice(props)"
+            />
           </td>
         </template>
       </q-table>
