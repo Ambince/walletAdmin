@@ -8,7 +8,7 @@ import axios from 'axios';
 import { NoticeInfo } from './model/NoticeInfo';
 import { useStore } from 'vuex';
 import { StateInterface } from '../store';
-import { backServerUrl } from '../utils/index';
+import { backServerUrl, langOptions } from '../utils/index';
 
 
 
@@ -50,6 +50,16 @@ function getNoticeList(lang: string) {
     });
 }
 
+
+async function pullNoticeFromServer(langValue: string): Promise<NoticeInfo[]> {
+  const notices = (await getNoticeList(langValue)) as NoticeInfo[];
+  for (const notice of notices) {
+    const langConfig = langOptions.find((item) => item.value == notice.lang);
+    notice.lang = langConfig?.label;
+  }
+  return notices;
+}
+
 export default function useNoticePage() {
   const selected = ref([]);
   const $q = useQuasar();
@@ -59,15 +69,15 @@ export default function useNoticePage() {
     rows: [] as NoticeInfo[],
     account: store.state.account?.accountName,
     lang: { label: '中文', value: 'zh' },
-    options: [{ label: '中文', value: 'zh' }, { label: '日语', value: 'ja' }, { label: 'English', value: 'en' }]
+    options: langOptions
   });
+
   onMounted(async () => {
-    data.rows = (await getNoticeList(data.lang.value)) as NoticeInfo[];
-    console.log('Amence onMounted data.rows',data.rows);
+    data.rows = await pullNoticeFromServer(data.lang.value);
   });
 
   watch(() => (data.lang), async () => {
-    data.rows = (await getNoticeList(data.lang.value)) as NoticeInfo[];
+    data.rows = await pullNoticeFromServer(data.lang.value);
   });
 
   const modifyNotice = (props: any) => {
@@ -75,7 +85,10 @@ export default function useNoticePage() {
       component: NoticeDialog,
       componentProps: {
         row: props ? props.row : null,
+        choiceLang: data.lang,
       },
+    }).onOk(async () => {
+      data.rows = await pullNoticeFromServer(data.lang.value);
     });
   };
 
@@ -86,6 +99,8 @@ export default function useNoticePage() {
         row: props ? props.row : null,
         type: 'notice',
       },
+    }).onOk(async () => {
+      data.rows = await pullNoticeFromServer(data.lang.value);
     });
   }
 
@@ -95,6 +110,5 @@ export default function useNoticePage() {
     modifyNotice,
     deleteNotice,
     ...toRefs(data)
-
   };
 }

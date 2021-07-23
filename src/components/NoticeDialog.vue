@@ -30,6 +30,7 @@
               color="secondary"
               flat
               class="q-ml-sm"
+              @click="clearInput"
             />
           </div>
         </div>
@@ -60,6 +61,9 @@ export default defineComponent({
     row: {
       type: Object,
     },
+    choiceLang:{
+      type:Object,
+    }
   },
   emits: [...useDialogPluginComponent.emits],
   setup(props) {

@@ -3,10 +3,10 @@
     <q-dialog ref="dialogRef">
       <div class="dialog-panel column items-start">
         <label class="dialog-title">{{ title }}</label>
-        <label class="dialog-content">确认要删除该管理员？</label>
+        <label class="dialog-content">{{ content }}</label>
 
         <div class="dialog-panel-div row justify-end">
-          <q-btn flat label="Cancel" color="secondary" @click="cancleDialog" />
+          <q-btn flat label="Cancel" color="secondary" @click="onDialogHide()" />
           <q-btn label="DELETE" color="red" @click="confirmDelete" />
         </div>
       </div>
@@ -25,17 +25,40 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, toRefs, reactive } from 'vue';
-import { useDialogPluginComponent, useQuasar } from 'quasar';
+<script lang="ts">
+import { defineComponent, toRefs, reactive } from "vue";
+import { useDialogPluginComponent, useQuasar } from "quasar";
 
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import { AdminInfo } from 'src/hooks/model/AdminInfo';
-import { backServerUrl } from 'src/utils/index';
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { AdminInfo } from "src/hooks/model/AdminInfo";
+import { backServerUrl, langOptions } from "src/utils/index";
+
+function convertPropsToData(props: any, data: any) {
+  data.name = props.row.name;
+  data.deleteParams.name = props.row.name;
+  data.routePath = props.type ? props.type : "/";
+  if (props.type == "admin") {
+    data.title = "管理员删除";
+    data.content = "确认删除该管理员？";
+    data.deleteUrl = backServerUrl + "/v1/deleteAdmin";
+    data.deleteParams.id = props.row?.id;
+  } else if (props.type == "notice") {
+    data.title = "通知删除";
+    data.content = "确认删除该条通知？";
+    data.deleteUrl = backServerUrl + "/v1/deleteNotice";
+    data.deleteParams.id = props.row?.id;
+    const langOption = langOptions.find(
+      (item) => item.label == props.row?.lang
+    );
+    if (langOption) {
+      data.deleteParams.lang = langOption.value;
+    }
+  }
+}
 
 export default defineComponent({
-  name: 'NoticeDialog',
+  name: "NoticeDialog",
   props: {
     row: {
       type: Object,
@@ -46,51 +69,40 @@ export default defineComponent({
   },
   emits: [...useDialogPluginComponent.emits],
   setup(props) {
-    const $q = useQuasar();
-    const router = useRouter();
     const data = reactive({
-      name: '',
+      name: "",
       dialog: false,
-      position: 'top',
-      tipInfo: '删除失败',
-      title: '',
-      deleteUrl: '',
+      position: "top",
+      tipInfo: "删除失败",
+      title: "",
+      content: "",
+      deleteUrl: "",
+      deleteParams: { id: "", lang: "", name: "" },
+      routePath: "/",
     });
     if (props.row) {
-      // eslint-disable-next-line vue/no-setup-props-destructure
-      data.name = props.row.name;
-      // eslint-disable-next-line vue/no-setup-props-destructure
-      if (props.type == 'admin') {
-        data.title = '管理员删除';
-        data.deleteUrl = backServerUrl + '/v1/deleteAdmin';
-      } else if (props.type == 'notice') {
-        data.title = '通知删除';
-        data.deleteUrl = backServerUrl + '/v1/deleteNotice';
-      }
+      convertPropsToData(props, data);
     }
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
 
     const confirmDelete = () => {
       try {
-        axios.post(data.deleteUrl, props.row.id).then((res) => {
+        axios.post(data.deleteUrl, data.deleteParams).then((res) => {
           if (res.data.success) {
+            onDialogOK();
             onDialogHide();
           } else {
             data.dialog = true;
-            data.tipInfo = res.data.result ? res.data.result : '删除失败';
+            data.tipInfo = res.data.result ? res.data.result : "删除失败";
           }
         });
       } catch (e) {
         data.dialog = true;
-        data.tipInfo = '删除失败';
+        data.tipInfo = "删除失败";
       }
     };
 
-
-    const cancleDialog = () => {
-      onDialogHide();
-    };
 
     return {
       dialogRef,
@@ -98,7 +110,6 @@ export default defineComponent({
       onDialogOK,
       onDialogCancel,
       ...toRefs(data),
-      cancleDialog,
       confirmDelete,
     };
   },

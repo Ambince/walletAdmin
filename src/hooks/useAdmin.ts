@@ -50,8 +50,6 @@ function getAdminList() {
 export default function useAdmin() {
   const selected = ref([]);
   const $q = useQuasar();
-  const route = useRoute();
-  const router = useRouter();
   const store = useStore<StateInterface>();
 
   const data = reactive({
@@ -70,6 +68,8 @@ export default function useAdmin() {
       componentProps: {
         row: props ? props.row : null,
       },
+    }).onOk(async () => {
+      data.rows = (await getAdminList()) as AdminInfo[];
     });
   };
 
@@ -80,7 +80,9 @@ export default function useAdmin() {
         row: props ? props.row : null,
         type: 'admin',
       },
-    });
+    }).onOk(async () => {
+      data.rows = (await getAdminList()) as AdminInfo[];
+    });;
   };
 
 

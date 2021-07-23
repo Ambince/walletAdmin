@@ -102,6 +102,7 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/restrict-plus-operands': 'off',
     'vue/no-async-in-computed-properties': 'off',
+    'vue/no-setup-props-destructure':'off',
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
   },

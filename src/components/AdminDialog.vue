@@ -28,16 +28,15 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive } from 'vue';
-import { useDialogPluginComponent, useQuasar } from 'quasar';
+import { defineComponent, toRefs, reactive } from "vue";
+import { useDialogPluginComponent } from "quasar";
 
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import { AdminInfo } from 'src/hooks/model/AdminInfo';
-import { backServerUrl } from 'src/utils/index';
+import axios from "axios";
+import { AdminInfo } from "src/hooks/model/AdminInfo";
+import { backServerUrl } from "src/utils/index";
 
 export default defineComponent({
-  name: 'NoticeDialog',
+  name: "NoticeDialog",
   props: {
     row: {
       type: Object,
@@ -45,14 +44,11 @@ export default defineComponent({
   },
   emits: [...useDialogPluginComponent.emits],
   setup(props) {
-    const $q = useQuasar();
-    const router = useRouter();
-
     const data = reactive({
-      name: '',
+      name: "",
       dialog: false,
-      position: 'top',
-      tipInfo: '请输入完整内容',
+      position: "top",
+      tipInfo: "请输入完整内容",
     });
     if (props.row) {
       // eslint-disable-next-line vue/no-setup-props-destructure
@@ -66,32 +62,26 @@ export default defineComponent({
         data.dialog = true;
         return;
       }
-      let pushUrl;
-      let admin;
+      const pushData = { pushUrl: "", admin: AdminInfo };
       if (props.row) {
-        pushUrl = backServerUrl + '/v1/updateAdmin';
-        admin = new AdminInfo(data.name, props.row.id);
+        pushData.pushUrl = backServerUrl + "/v1/updateAdmin";
+        pushData.admin = new AdminInfo(data.name, props.row.id);
       } else {
-        pushUrl = backServerUrl + '/v1/addAdmin';
-        admin = new AdminInfo(data.name);
+        pushData.pushUrl = backServerUrl + "/v1/addAdmin";
+        pushData.admin = new AdminInfo(data.name);
       }
-      axios.post(pushUrl, admin).then((res) => {
+      axios.post(pushData.pushUrl, pushData.admin).then((res) => {
         if (res.data.success) {
+          onDialogOK();
           onDialogHide();
-          router.push({
-            path: '/index',
-          });
-        } else {
-          data.dialog = true;
-          data.tipInfo = res.data.result;
+          return;
         }
+        data.dialog = true;
+        data.tipInfo = res.data.result;
       });
     };
 
-    const checkInputFormat = () => {
-      return data.name ? true : false;
-    };
-
+    const checkInputFormat = () => {return data.name ? true : false;};
     return {
       dialogRef,
       onDialogHide,
