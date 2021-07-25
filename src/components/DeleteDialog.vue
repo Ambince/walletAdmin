@@ -6,7 +6,12 @@
         <label class="dialog-content">{{ content }}</label>
 
         <div class="dialog-panel-div row justify-end">
-          <q-btn flat label="Cancel" color="secondary" @click="onDialogHide()" />
+          <q-btn
+            flat
+            label="Cancel"
+            color="secondary"
+            @click="onDialogHide()"
+          />
           <q-btn label="DELETE" color="red" @click="confirmDelete" />
         </div>
       </div>
@@ -30,8 +35,8 @@ import { defineComponent, toRefs, reactive } from "vue";
 import { useDialogPluginComponent, useQuasar } from "quasar";
 
 import axios from "axios";
-import { useRouter } from "vue-router";
-import { AdminInfo } from "src/hooks/model/AdminInfo";
+import { useStore } from "vuex";
+
 import { backServerUrl, langOptions } from "src/utils/index";
 
 function convertPropsToData(props: any, data: any) {
@@ -69,6 +74,8 @@ export default defineComponent({
   },
   emits: [...useDialogPluginComponent.emits],
   setup(props) {
+    const store = useStore();
+
     const data = reactive({
       name: "",
       dialog: false,
@@ -77,9 +84,12 @@ export default defineComponent({
       title: "",
       content: "",
       deleteUrl: "",
-      deleteParams: { id: "", lang: "", name: "" },
+      deleteParams: { id: "", lang: "", name: "", address: "" },
       routePath: "/",
     });
+    const account: string = store.state.account?.accountName;
+    const accoutInfoArray: string[] = account.split("|");
+    data.deleteParams.address = accoutInfoArray[accoutInfoArray.length - 1];
     if (props.row) {
       convertPropsToData(props, data);
     }
@@ -88,21 +98,21 @@ export default defineComponent({
 
     const confirmDelete = () => {
       try {
-        axios.post(data.deleteUrl, data.deleteParams).then((res) => {
-          if (res.data.success) {
-            onDialogOK();
-            onDialogHide();
-          } else {
-            data.dialog = true;
-            data.tipInfo = res.data.result ? res.data.result : "删除失败";
-          }
-        });
+        axios.post(data.deleteUrl, data.deleteParams)
+          .then((res) => {
+            if (res.data.success) {
+              onDialogOK();
+              onDialogHide();
+            } else {
+              data.dialog = true;
+              data.tipInfo = res.data.result ? res.data.result : "删除失败";
+            }
+          });
       } catch (e) {
         data.dialog = true;
         data.tipInfo = "删除失败";
       }
     };
-
 
     return {
       dialogRef,

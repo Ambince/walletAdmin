@@ -6,15 +6,15 @@
           :rules="[() => checkInputFormat()]"
           reactive-rules
           v-model="name"
-          label="管理员地址"
+          label="管理员昵称"
           class="dialog-panel-input"
         />
 
         <q-input
-          :rules="[() => checkInputFormat()]"
+          :rules="[() => checkAddressFormat()]"
           reactive-rules
           v-model="address"
-          label="管理员昵称"
+          label="管理员地址"
           class="dialog-panel-input"
         />
 
@@ -54,7 +54,7 @@ export default defineComponent({
   setup(props) {
     const data = reactive({
       name: "",
-      address:"",
+      address: "",
       dialog: false,
       position: "top",
       tipInfo: "请输入完整内容",
@@ -64,9 +64,7 @@ export default defineComponent({
       data.name = props.row.name;
       data.address = props.row.address;
     }
-    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
-      useDialogPluginComponent();
-
+    const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent();
     const pushAdmin = () => {
       if (!checkInputFormat()) {
         data.dialog = true;
@@ -75,10 +73,14 @@ export default defineComponent({
       const pushData = { pushUrl: "", admin: AdminInfo };
       if (props.row) {
         pushData.pushUrl = backServerUrl + "/v1/updateAdmin";
-        pushData.admin = new AdminInfo(data.name, props.row.address,props.row.id);
+        pushData.admin = new AdminInfo(
+          data.name,
+          props.row.address,
+          props.row.id
+        );
       } else {
         pushData.pushUrl = backServerUrl + "/v1/addAdmin";
-        pushData.admin = new AdminInfo(data.name,data.address);
+        pushData.admin = new AdminInfo(data.name, data.address);
       }
       axios.post(pushData.pushUrl, pushData.admin).then((res) => {
         if (res.data.success) {
@@ -91,7 +93,12 @@ export default defineComponent({
       });
     };
 
-    const checkInputFormat = () => {return data.name ? true : false;};
+    const checkInputFormat = () => {
+      return data.name ? true : false;
+    };
+    const checkAddressFormat = () => {
+      return data.address ? true : false;
+    };
     return {
       dialogRef,
       onDialogHide,
@@ -100,6 +107,7 @@ export default defineComponent({
       ...toRefs(data),
       pushAdmin,
       checkInputFormat,
+      checkAddressFormat,
     };
   },
 });

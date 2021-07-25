@@ -37,9 +37,7 @@ export default function useNoticeDialog(props: any) {
     data.title = props.row.title;
     data.content = props.row.content;
     const choiceOption = data.options.find(item => item.value == props.row.lang);
-    if (choiceOption) {
-      data.lang = choiceOption;
-    }
+    if (choiceOption) {data.lang = choiceOption}
   }
 
   const clearInput = () => {
@@ -61,12 +59,12 @@ export default function useNoticeDialog(props: any) {
     const accoutInfoArray: string[] = account.split("|");
     notice.name = accoutInfoArray[0];
     notice.address = accoutInfoArray[accoutInfoArray.length - 1];
-
     const pushNoticeUrl = backServerUrl + '/v1/pushServerNotice';
     axios.post(pushNoticeUrl, notice).then(res => {
       if (res.data.success) {
         onDialogOK();
         onDialogHide();
+        return;
       }
       data.dialog = true;
       data.noticeTip = res.data.result;

@@ -8,7 +8,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="drawer" show-if-above :width="200" :breakpoint="400">
+    <q-drawer v-model="drawer" show-if-above :width="275" :breakpoint="400">
       <q-scroll-area class="drawer-area">
         <q-list padding>
           <q-item active clickable v-ripple @click="pageTo('notice')">
@@ -36,7 +36,8 @@
           <q-avatar size="56px" class="q-mb-sm">
             <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
           </q-avatar>
-          <div class="text-weight-bold">{{ account }}</div>
+          <div class="text-weight-bold">{{ accountName }}</div>
+          <div class="text-address">{{ accountAddress }}</div>
         </div>
       </q-img>
     </q-drawer>
@@ -48,27 +49,39 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, reactive } from 'vue';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
-import { StateInterface } from 'src/store';
-import useWalletConnect from 'src/hooks/useWalletConnect';
+import { defineComponent, ref, onMounted, reactive,toRefs } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { StateInterface } from "src/store";
+import useWalletConnect from "src/hooks/useWalletConnect";
+
+function convertAccountInfo(accountInfo: string | undefined, data: any) {
+  const accountArray = accountInfo?.split("|");
+  if (!accountArray) {return; }
+  data.accountName = accountArray[0];
+  data.accountAddress = accountArray[accountArray.length - 1];
+}
 
 export default defineComponent({
-  name: 'MainLayout',
+  name: "MainLayout",
   setup() {
-    const title = ref('ChainAdmin');
+    const data = reactive({
+      title: "ChainAdmin",
+      accountName: "未获取",
+      accountAddress: "未获取",
+      drawer:false,
+    });
     const router = useRouter();
     const store = useStore<StateInterface>();
-    const account = store.state.account?.accountName;
+    convertAccountInfo(store.state.account?.accountName, data);
     const logout = () => {
       const { dataWC, disconnect } = useWalletConnect(false);
       if (dataWC.session?.topic) {
         disconnect(dataWC.session.topic);
       }
-      store.dispatch('setAccount', undefined);
-      store.dispatch('setIndexReload', true);
-      router.push({ path: '/' });
+      store.dispatch("setAccount", undefined);
+      store.dispatch("setIndexReload", true);
+      router.push({ path: "/" });
     };
 
     onMounted(async () => {
@@ -78,15 +91,15 @@ export default defineComponent({
     });
 
     const pageTo = (path: string) => {
-      if (path == 'admin') {
-        title.value = '管理员设置';
+      if (path == "admin") {
+        data.title = "管理员设置";
       }
-      if (path == 'notice') {
-        title.value = '通知设置';
+      if (path == "notice") {
+        data.title = "通知设置";
       }
       router.push({ path: path });
     };
-    return { title, pageTo, logout, drawer: ref(false), account };
+    return { ...toRefs(data), pageTo, logout, };
   },
 });
 </script>
@@ -98,6 +111,10 @@ export default defineComponent({
   border-right: 1px solid #ddd;
 }
 .td-text {
-  font-size: 100px;
+  font-size: 1rem;
+}
+.text-address{
+  font-size: 0.5rem;
+  font-weight: 500;
 }
 </style>
