@@ -6,7 +6,15 @@
           :rules="[() => checkInputFormat()]"
           reactive-rules
           v-model="name"
-          label="管理员账号"
+          label="管理员地址"
+          class="dialog-panel-input"
+        />
+
+        <q-input
+          :rules="[() => checkInputFormat()]"
+          reactive-rules
+          v-model="address"
+          label="管理员昵称"
           class="dialog-panel-input"
         />
 
@@ -46,6 +54,7 @@ export default defineComponent({
   setup(props) {
     const data = reactive({
       name: "",
+      address:"",
       dialog: false,
       position: "top",
       tipInfo: "请输入完整内容",
@@ -53,6 +62,7 @@ export default defineComponent({
     if (props.row) {
       // eslint-disable-next-line vue/no-setup-props-destructure
       data.name = props.row.name;
+      data.address = props.row.address;
     }
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
       useDialogPluginComponent();
@@ -65,10 +75,10 @@ export default defineComponent({
       const pushData = { pushUrl: "", admin: AdminInfo };
       if (props.row) {
         pushData.pushUrl = backServerUrl + "/v1/updateAdmin";
-        pushData.admin = new AdminInfo(data.name, props.row.id);
+        pushData.admin = new AdminInfo(data.name, props.row.address,props.row.id);
       } else {
         pushData.pushUrl = backServerUrl + "/v1/addAdmin";
-        pushData.admin = new AdminInfo(data.name);
+        pushData.admin = new AdminInfo(data.name,data.address);
       }
       axios.post(pushData.pushUrl, pushData.admin).then((res) => {
         if (res.data.success) {

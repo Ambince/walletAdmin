@@ -1,9 +1,7 @@
-import { useQuasar } from 'quasar';
 import { NoticeInfo } from './model/NoticeInfo';
 import { reactive, toRefs, ref, watch } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { backServerUrl, langOptions, useEditor } from 'src/utils/index';
 
@@ -29,7 +27,7 @@ export default function useNoticeDialog(props: any) {
     lang: { label: 'English', value: 'en' },
     options: langOptions,
   });
-  const account = store.state.account?.accountName;
+  const account: string = store.state.account?.accountName;
 
   if (props.choiceLang) {
     data.lang = props.choiceLang;
@@ -54,19 +52,15 @@ export default function useNoticeDialog(props: any) {
       data.dialog = true;
       return;
     }
-    let notice;
+    let notice: NoticeInfo;
     if (props.row) {
-      notice = new NoticeInfo(
-        data.title,
-        data.content,
-        data.lang.value,
-        props.row.id,
-        props.row.name
-      );
+      notice = new NoticeInfo(data.title, data.content, data.lang.value, props.row.id, props.row.name, props.row.address);
     } else {
       notice = new NoticeInfo(data.title, data.content, data.lang.value);
     }
-    notice.name = account;
+    const accoutInfoArray: string[] = account.split("|");
+    notice.name = accoutInfoArray[0];
+    notice.address = accoutInfoArray[accoutInfoArray.length - 1];
 
     const pushNoticeUrl = backServerUrl + '/v1/pushServerNotice';
     axios.post(pushNoticeUrl, notice).then(res => {

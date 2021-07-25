@@ -2,6 +2,7 @@ export class NoticeInfo {
   id: number;
   time: string;
   name: string;
+  address: string;
   title: string;
   content: string;
   lang: any;
@@ -10,7 +11,8 @@ export class NoticeInfo {
     content: string,
     lang?: any,
     id?: number,
-    name?: string
+    name?: string,
+    address?: string,
   ) {
     this.title = title;
     this.content = content;
@@ -18,5 +20,6 @@ export class NoticeInfo {
     this.name = name ? name : '';
     this.id = id ? id : 0;
     this.lang = lang ? lang : 'en';
+    this.address = address ? address : '';
   }
 }
