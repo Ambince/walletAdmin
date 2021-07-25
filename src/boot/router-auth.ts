@@ -6,7 +6,5 @@ export default boot(async ({ app, router, store, urlPath, publicPath, redirect }
 
     //全局路由前置，检查认证状态
     router.beforeEach((to, from, next) => {
-        console.log('Amence to', to);
-        console.log('Amence from', to);
     });
 });

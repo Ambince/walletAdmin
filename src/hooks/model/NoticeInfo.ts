@@ -1,6 +1,6 @@
 export class NoticeInfo {
   id: number;
-  time: Date;
+  time: string;
   name: string;
   title: string;
   content: string;
@@ -14,7 +14,7 @@ export class NoticeInfo {
   ) {
     this.title = title;
     this.content = content;
-    this.time = new Date();
+    this.time = new Date().toLocaleString();
     this.name = name ? name : '';
     this.id = id ? id : 0;
     this.lang = lang ? lang : 'en';

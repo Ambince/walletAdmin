@@ -20,10 +20,10 @@ const columns = [
     field: 'id',
     sortable: true,
   },
-  { name: 'name', label: 'name', field: 'name' },
+  { name: 'name', label: '管理员地址', field: 'name' },
   {
     name: 'time',
-    label: 'time',
+    label: '发布时间',
     field: 'time',
     sortable: true,
   },

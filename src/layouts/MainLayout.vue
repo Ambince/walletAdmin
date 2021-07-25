@@ -66,7 +66,9 @@ export default defineComponent({
       if (dataWC.session?.topic) {
         disconnect(dataWC.session.topic);
       }
+      store.dispatch('setAccount', undefined);
       store.dispatch('setIndexReload', true);
+      router.push({ path: '/' });
     };
 
     onMounted(async () => {

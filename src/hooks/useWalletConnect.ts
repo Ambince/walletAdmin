@@ -9,6 +9,8 @@ import { StateInterface } from 'src/store';
 import { DEFAULT_RELAY_PROVIDER, AppState } from 'src/utils';
 import { onMounted, reactive } from 'vue';
 import { useStore, Store } from 'vuex';
+import { LocalStorage, SessionStorage } from 'quasar'
+
 const dataWC = reactive<IWalletConnect>({
     accounts: [],
     client: undefined,
@@ -50,6 +52,8 @@ export default function useWalletConnect(
             reason: ERROR.USER_DISCONNECTED.format(),
         });
         resetConnect();
+        LocalStorage.clear();
+
     };
 
     if (globalUse) {

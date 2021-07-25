@@ -13,9 +13,7 @@ export const CHAIN_ID = 'bsv:livenet';
 
 export const DEFAULT_LOGGER = 'debug';
 export const DEFAULT_METHODS = {
-  getBalance: 'getBalance',
-  pay: 'pay',
-  signOutputsAndBroadcast: 'signOutputsAndBroadcast',
+  sign:'sign',
 };
 
 // export const backServerUrl = 'http://127.0.0.1:8088';
@@ -27,12 +25,15 @@ export interface AppState {
   client: Client | undefined;
   session: SessionTypes.Created | undefined;
   accounts: string[];
+  signData:string;
 }
 
 export const INITIAL_STATE: AppState = {
   client: undefined,
   session: undefined,
   accounts: [],
+  signData:'',
+
 };
 
 export interface AccountBalances {
